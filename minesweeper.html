@@ -3,11 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetris</title>
-    <link rel="stylesheet" href="minesweeper.css">
-    <script src="minesweeper.js"></script>
+    <title>Canvas for Scratch</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #0b064d;
+        }
+        h1 {
+            color: #f3dcff;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            border: 2px solid #f3dcff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(243, 220, 255, 0.7);
+            background-color: rgba(255, 255, 255, 0.1);
+            margin-bottom: 40px;
+    
+        }
+        canvas {
+            background-color: #cabbdf;
+            border: 2px solid #f3dcff;
+            box-shadow: 0 0 60px rgba(255, 255, 255, 0.5);
+            width: 80%;
+            height: 80%;
+            border-radius: 30px;
+        }
+    </style>
 </head>
 <body>
-    
+    <h1>INDIGO</h1>
+    <canvas id="scratchCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('scratchCanvas');
+        const context = canvas.getContext('2d');
+
+        // Resize the canvas to fill the parent element
+        function resizeCanvas() {
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+        }
+        
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas(); // Initial call to set the canvas size
+    </script>
 </body>
 </html>
