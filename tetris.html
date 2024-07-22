@@ -3,11 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tetris</title>
-    <link rel="stylesheet" href="tetris.css">
-    <script src="tetris.js"></script>
+    <title>Minesweeper</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    
+    <div id="minesweeper">
+        <div class="top">
+            <span id="mines-count">999</span>
+            <button id="reset-btn" onclick="init()">😊</button>
+            <span id="timer">000</span>
+        </div>
+        <div id="board"></div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
