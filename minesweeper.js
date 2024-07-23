@@ -13,7 +13,7 @@ let minesLeft = NUM_MINES;
 let minesLeftElement = null;
 let firstMove = true;
 let timer = 0;
-let timerElement = null
+let timerElement = null;
 let timerID = null;
 
 /* add the score variable here */
@@ -66,15 +66,14 @@ function reveal(x, y) {
       timer++;
       render(gridElement);
     }, 1000);       
-  er}
+  }
 
   if (grid[x][y].isMine) {
     gameOver = true;
 
     /* create and display the "Game Over" message */
-    displayGameOverMessage()
+    displayGameOverMessage();
 
-    
     // Clear the timer interval
     clearInterval(timerID);
     
@@ -99,7 +98,7 @@ function reveal(x, y) {
     gameOver = true;
 
     /* create and display the "All clear!" message */
-    displayAllClearMessage()
+    displayAllClearMessage();
 
     // Clear the timer interval
     clearInterval(timerID);    
@@ -151,7 +150,7 @@ function flag(x, y) {
     if (remaining === 0) {
       gameOver = true;
 
-      displayAllClearMessage()
+      displayAllClearMessage();
     }
   }
 }
@@ -261,7 +260,7 @@ function init(width, height) {
         rightClick(x, y);
         render(gridElement);
       });
-      gridElement.appendChild(cellElement      );
+      gridElement.appendChild(cellElement);
     }
   }
 
@@ -323,9 +322,9 @@ function render(gridElement) {
     }
 
     if (flags === NUM_MINES) {
-      displayAllClearMessage()
+      displayAllClearMessage();
     } else {
-      displayGameOverMessage()
+      displayGameOverMessage();
     }
   } else {
     const timerElement = document.getElementById('timer');
@@ -394,6 +393,7 @@ function displayGameOverMessage() {
   if (!gameOverElement) {
     gameOverElement = document.createElement('div');
     gameOverElement.id = 'game-over';
+    gameOverElement.style.fontFamily='Times New Roman';
     gameOverElement.style.fontSize = '30px';
     gameOverElement.style.color = 'purple';
     gameOverElement.style.position = 'absolute';
@@ -401,13 +401,31 @@ function displayGameOverMessage() {
     gameOverElement.style.top = '50%';
     gameOverElement.style.transform = 'translate(-50%, -50%)';
     gameOverElement.style.backgroundColor = 'white';
-    gameOverElement.style.border = '5px solid purple';
-    gameOverElement.style.padding = '10px';    
+    gameOverElement.style.borderRadius = '10px';  // 设置圆角
+    gameOverElement.style.padding = '10px';
+    gameOverElement.style.boxShadow = '0 0 70px #8662b4';  // 添加荧光效果
     document.body.appendChild(gameOverElement);
+    
+    // 添加显示 GIF 的元素
+    let gameOverGif = document.createElement('img');
+    gameOverGif.src = 'gameover.gif';  // 设置 GIF 的路径
+    gameOverGif.style.position = 'absolute';
+    gameOverGif.style.left = '50%';
+    gameOverGif.style.top = '60%';
+    gameOverGif.style.transform = 'translate(-50%, -50%)';
+    gameOverGif.style.opacity = '0';  // 初始透明度
+    gameOverGif.style.transition = 'opacity 2s ease-in-out';  // 渐变效果
+
+    document.body.appendChild(gameOverGif);
+
+    // 延迟设置透明度为 1，实现渐变效果
+    setTimeout(() => {
+        gameOverGif.style.opacity = '1';
+    }, 0);
   }
 
   if (gameOver) {
-    gameOverElement.innerText = 'Oops:( Game Over!';
+    gameOverElement.innerText = 'OOPS:( GAME OVER!!!';
   } else {
     gameOverElement.innerText = '';
   }
@@ -431,4 +449,3 @@ function displayAllClearMessage() {
   }
   allClearElement.innerText = 'All Clear!';
 }
-
