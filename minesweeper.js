@@ -1,14 +1,15 @@
 class Board {
-    constructor(size) {
+    constructor(sizeX, sizeY) {
         this.displayBoard = [];
         this.mineBoard = [];
-        this.size = size;
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
     }
     setBoards() {
-        for (let x = 0; x < this.size; x++) {
+        for (let x = 0; x < this.sizeX; x++) {
             this.displayBoard.push([]);
             this.mineBoard.push([]);
-            for (let y = 0; y < this.size; y++) {
+            for (let y = 0; y < this.sizeY; y++) {
                 this.displayBoard[x].push(" ");
                 this.mineBoard[x].push("");
             }
@@ -53,6 +54,30 @@ class Board {
     }
 }
 
-let board = new Board(5);
-board.setBoards();
-board.setMineBoard(0, 0, 5);
+let submit = document.getElementById("submit");
+let mines = 0;
+submit.addEventListener("click", start, false);
+let board;
+
+function start() {
+    let sizeX = Number(document.getElementById("sizeX").value);
+    let sizeY = Number(document.getElementById("sizeY").value);
+    mines = Number(document.getElementById("mines").value);
+    let reject = document.getElementById("reject");
+
+    if (sizeX == 0 || sizeY == 0) {
+        reject.textContent = "Error. There must be at least 1 row and 1 column.";
+        return;
+    }
+    if (mines < 1 || mines >= sizeX * sizeY) {
+        reject.textContent = "Error. There must be at least 1 mine and 1 free space.";
+        return;
+    }
+
+    board = new Board(sizeX, sizeY)
+    document.body.removeChild(document.getElementById("input"));
+    let grid = document.createElement("div");
+    grid.id = "grid";
+    document.body.appendChild(grid);
+    grid.style.setProperty("grid-template-columns", "repeat(" + board.sizeX + ", 30px)")
+}

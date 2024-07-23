@@ -1,0 +1,15 @@
+#reject {
+    color: red;
+    font-size: small;
+}
+#grid{
+    display: grid;
+    margin-top: 20px
+}
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    border: 1px solid black;
+}
