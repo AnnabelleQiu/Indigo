@@ -1,16 +1,13 @@
 class Board {
     constructor(sizeX, sizeY) {
-        this.displayBoard = [];
         this.mineBoard = [];
         this.sizeX = sizeX;
         this.sizeY = sizeY;
     }
     setBoards() {
         for (let x = 0; x < this.sizeX; x++) {
-            this.displayBoard.push([]);
             this.mineBoard.push([]);
             for (let y = 0; y < this.sizeY; y++) {
-                this.displayBoard[x].push(" ");
                 this.mineBoard[x].push("");
             }
         }
@@ -52,12 +49,26 @@ class Board {
             }
         }
     }
+    createCells() {
+        for (let x = 0; x < this.mineBoard.length; x++) {
+            for (let y = 0; y < this.mineBoard[0].length; y++) {
+                let cell = document.createElement("div");
+                cell.className = "cell";
+                cell.x = x;
+                cell.y = y;
+                cell.addEventListener("click", firstClick, false);
+                cell.addEventListener("click", click, false)
+                grid.appendChild(cell);
+            }
+        }
+    }
 }
 
 let submit = document.getElementById("submit");
 let mines = 0;
 submit.addEventListener("click", start, false);
 let board;
+let grid;
 
 function start() {
     let sizeX = Number(document.getElementById("sizeX").value);
@@ -75,9 +86,20 @@ function start() {
     }
 
     board = new Board(sizeX, sizeY)
+    board.setBoards();
     document.body.removeChild(document.getElementById("input"));
-    let grid = document.createElement("div");
+    grid = document.createElement("div");
     grid.id = "grid";
     document.body.appendChild(grid);
     grid.style.setProperty("grid-template-columns", "repeat(" + board.sizeX + ", 30px)")
+    board.createCells();
+}
+function firstClick() {
+    x = this.x;
+    y = this.y;
+    board.setMineBoard(x, y, mines);
+    this.removeEventListener("click", firstClick, false);
+}
+function click() {
+    
 }
