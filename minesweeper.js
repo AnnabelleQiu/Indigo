@@ -50,16 +50,30 @@ class Board {
         }
     }
     createCells() {
+        let num = 0;
+
         for (let x = 0; x < this.mineBoard.length; x++) {
             for (let y = 0; y < this.mineBoard[0].length; y++) {
                 let cell = document.createElement("div");
                 cell.className = "cell";
+                cell.num = num;
                 cell.x = x;
                 cell.y = y;
                 cell.addEventListener("click", firstClick, false);
-                cell.addEventListener("click", click, false)
+                cell.addEventListener("click", click, false);
+                cell.addEventListener("contextmenu", flag, false);
                 grid.appendChild(cell);
+                num++;
             }
+        }
+    }
+    getCell(x, y) {
+        return this.mineBoard[x][y];
+    }
+    reveal() {
+        let cells = document.getElementsByClassName("cell");
+        for (let cell of cells) {
+            cell.textContent = this.mineBoard[cell.x][cell.y];
         }
     }
 }
@@ -69,6 +83,11 @@ let mines = 0;
 submit.addEventListener("click", start, false);
 let board;
 let grid;
+let firstClicked = false;
+let done = false;
+let numberClicked = 0;
+let outcome = document.createElement("div");
+outcome.style.display = "block";
 
 function start() {
     let sizeX = Number(document.getElementById("sizeX").value);
@@ -93,13 +112,100 @@ function start() {
     document.body.appendChild(grid);
     grid.style.setProperty("grid-template-columns", "repeat(" + board.sizeX + ", 30px)")
     board.createCells();
+
+    document.body.appendChild(outcome);
 }
 function firstClick() {
-    x = this.x;
-    y = this.y;
-    board.setMineBoard(x, y, mines);
-    this.removeEventListener("click", firstClick, false);
+    if (!firstClicked) {
+        x = this.x;
+        y = this.y;
+        board.setMineBoard(x, y, mines);
+        this.removeEventListener("click", firstClick, false);
+        firstClicked = true;
+    }
 }
 function click() {
-    
+    if (!done && !this.clicked) {
+        let result = board.getCell(this.x, this.y);
+        this.textContent = result;
+        if (!this.clicked) {
+            numberClicked++;
+        }
+        this.clicked = true;
+        this.style.backgroundColor = "white"
+
+        if (result == "X") { //lose
+            done = true;
+            outcome.textContent = "You lose, dumbass";
+
+            board.reveal();
+        } else if (numberClicked == (board.sizeX * board.sizeY) - mines) { //win
+            done = true;
+            outcome.textContent = "You win, smartass";
+        }
+
+        if (result == 0) {
+            this.textContent = "";
+            let cells = document.getElementsByClassName("cell");
+            let toClick = [];
+
+            if ((this.num + 1) % board.sizeY != 0) {    //right
+                //getDiv(this.num + 1).click();
+                toClick.push(this.num + 1);
+            }
+            if ((this.num) % board.sizeY != 0) {    //left
+                // getDiv(this.num - 1).click();
+                toClick.push(this.num - 1);
+            }
+            if (this.num <= cells.length - board.sizeX) {   //down
+                // getDiv(this.num + board.sizeX).click(); 
+                toClick.push(this.num + board.sizeX);
+            }
+            if (this.num >= board.sizeX) {  //up
+                // getDiv(this.num - board.sizeX).click();
+                toClick.push(this.num - board.sizeX);
+            }
+            if (this.num >= board.sizeX && (this.num + 1) % board.sizeY != 0) { //up right
+                // getDiv(this.num + 1 - board.sizeX).click();
+                toClick.push(this.num + 1 - board.sizeX);
+            }
+            if (this.num >= board.sizeX && (this.num) % board.sizeY != 0) { //up left
+                // getDiv(this.num - 1 - board.sizeX).click();
+                toClick.push(this.num - 1 - board.sizeX);
+            }
+            if (this.num <= cells.length - board.sizeX && (this.num + 1) % board.sizeY != 0) {  //down right
+                // getDiv(this.num + 1 + board.sizeX).click();
+                toClick.push(this.num + 1 + board.sizeX);
+            }
+            if (this.num <= cells.length - board.sizeX && (this.num) % board.sizeY != 0) {  //down left
+                // getDiv(this.num - 1 + board.sizeX).click();
+                toClick.push(this.num - 1 + board.sizeX);
+            }
+
+            for (let num of toClick) {
+                getDiv(num).click();
+            }
+        }
+    }
+}
+function flag(event) {
+    if (!done) {
+        event.preventDefault();
+
+        if (!this.flagged) {
+            this.flagged = true;
+            let flag = document.createElement("img");
+            flag.className = "flag";
+            flag.src = "images/flag.png";
+            this.textContent = "";
+            this.appendChild(flag);
+        } else {
+            this.textContent = "";
+            this.flagged = false;
+        }
+    }
+}
+function getDiv(num) {
+    let cells = document.getElementsByClassName("cell");
+    return cells[num];
 }

@@ -7,9 +7,13 @@
     margin-top: 20px;
 }
 .cell {
+    background-color: green;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 30px;
     border: 1px solid black;
+}
+.flag {
+    width: 100%;
 }
