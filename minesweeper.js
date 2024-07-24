@@ -59,6 +59,7 @@ class Board {
                 cell.className = "cell";
                 cell.x = x;
                 cell.y = y;
+                cell.clicked = false;
                 cell.addEventListener("click", firstClick, false);
                 cell.addEventListener("click", click, false);
                 cell.addEventListener("contextmenu", flag, false);
@@ -90,35 +91,58 @@ let firstClicked = false;
 let done = false;
 let numberClicked = 0;
 let outcome = document.createElement("div");
-outcome.id = "outcome";
 outcome.style.display = "block";
 let cells = [];
+let timerContainer = document.createElement("div");
+timerContainer.id = "timer";
+let counter = 0;
+let stopwatch;
+let watchpng = document.createElement("img");
+let timer = document.createElement("div");
+let container = document.createElement("div");
+watchpng.src = "images/stopwatch.png";
+let firstGame = true;
+let sizeX;
+let sizeY;
 
 function start() {
-    let sizeX = Number(document.getElementById("sizeX").value);
-    let sizeY = Number(document.getElementById("sizeY").value);
-    mines = Number(document.getElementById("mines").value);
-    let reject = document.getElementById("reject");
+    if (firstGame) {
+        sizeX = Math.floor(Number(document.getElementById("sizeX").value));
+        sizeY = Math.floor(Number(document.getElementById("sizeY").value));
+        mines = Math.floor(Number(document.getElementById("mines").value));
+        let reject = document.getElementById("reject");
 
-    if (sizeX <= 0 || sizeY <= 0) {
-        reject.textContent = "Error. There must be at least 1 row and 1 column.";
-        return;
-    }
-    if (mines < 1 || mines >= sizeX * sizeY) {
-        reject.textContent = "Error. There must be at least 1 mine and 1 free space.";
-        return;
+        if (sizeX <= 0 || sizeY <= 0) {
+            reject.textContent = "Error. There must be at least 1 row and 1 column.";
+            return;
+        }
+        if (mines < 1 || mines >= sizeX * sizeY) {
+            reject.textContent = "Error. There must be at least 1 mine and 1 free space.";
+            return;
+        }
     }
 
+    container = document.createElement("div");
+    document.body.appendChild(container);
     board = new Board(sizeX, sizeY)
     board.setBoards();
-    document.body.removeChild(document.getElementById("input"));
+    if (firstGame) {
+        document.body.removeChild(document.getElementById("input"));
+    }
     grid = document.createElement("div");
     grid.id = "grid";
-    document.body.appendChild(grid);
+    container.appendChild(grid);
     grid.style.setProperty("grid-template-columns", "repeat(" + board.sizeX + ", 30px)")
     board.createCells();
 
-    document.body.appendChild(outcome);
+    container.appendChild(timerContainer);
+    timerContainer.appendChild(watchpng);
+    timerContainer.appendChild(timer);
+    timer.textContent = counter;
+    
+    stopwatch = setInterval(time, 1000);
+
+    container.appendChild(outcome);
 }
 function firstClick() {
     if (!firstClicked) {
@@ -140,10 +164,10 @@ function click() {
         this.style.backgroundColor = "white"
 
         if (result == "X") { //lose
-            finishGame("You lose, dumbass");
+            finishGame("You lose :(");
             board.reveal();
         } else if (numberClicked == (board.sizeX * board.sizeY) - mines) { //win
-            finishGame("You win, smartass");
+            finishGame("You win! :)");
         }
 
         if (result == 0) {
@@ -199,6 +223,29 @@ function getDiv(num) {
 }
 function finishGame(text) {
     done = true;
+    outcome.id = "outcome"
     outcome.textContent = text;
-    outcome.style.backgroundColor = "white";
+    clearInterval(stopwatch);
+
+    let reset = document.createElement("button");
+    reset.textContent = "Reset";
+    reset.addEventListener("click", restart, false);
+    container.appendChild(reset);
+}
+function time() {
+    counter++;
+    timer.textContent = counter;
+}
+function restart() {
+    document.body.removeChild(container);
+    firstGame = false;
+    outcome.textContent = "";
+    outcome.id = "";
+    done = false;
+    numberClicked = 0;
+    firstClicked = false;
+    counter = 0;
+    cells = [];
+
+    start();
 }

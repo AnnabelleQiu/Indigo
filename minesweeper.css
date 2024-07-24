@@ -21,7 +21,8 @@ body{
 button{
     position: relative;
     background-color: transparent;
-    left: 40%;
+    left: 50%;
+    transform: translate(-50%);
     padding: 15px;
     display: block;
 
@@ -41,20 +42,36 @@ button{
     margin-top: 20px;
 }
 .cell {
-    background-color: green;
+    background-color: rgb(77, 36, 144);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 30px;
     border: 1px solid black;
 }
-.flag {
-    width: 100%;
+img {
+    height: 100%;
 }
 
 #outcome{
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 2px solid black;
+    padding: 10px;
+}
+
+#timer {
+    border: 3px solid black;
+    padding: 10px;
+    height: 20px;
+    width: 50px;
+    display: flex;
+    justify-content: space-around;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    position: absolute;
 }
