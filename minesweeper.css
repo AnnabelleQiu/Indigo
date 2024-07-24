@@ -1,8 +1,42 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#input{    
+    position: relative;
+    top: 25vh;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+#input div{
+    margin: 50px;
+}
+
+button{
+    position: relative;
+    background-color: transparent;
+    left: 40%;
+    padding: 15px;
+    display: block;
+
+}
+
 #reject {
     color: red;
     font-size: small;
+    display: block;
 }
 #grid{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     display: grid;
     margin-top: 20px;
 }
@@ -16,4 +50,11 @@
 }
 .flag {
     width: 100%;
+}
+
+#outcome{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
 }

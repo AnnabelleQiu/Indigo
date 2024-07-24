@@ -90,6 +90,7 @@ let firstClicked = false;
 let done = false;
 let numberClicked = 0;
 let outcome = document.createElement("div");
+outcome.id = "outcome";
 outcome.style.display = "block";
 let cells = [];
 
@@ -139,13 +140,10 @@ function click() {
         this.style.backgroundColor = "white"
 
         if (result == "X") { //lose
-            done = true;
-            outcome.textContent = "You lose, dumbass";
-
+            finishGame("You lose, dumbass");
             board.reveal();
         } else if (numberClicked == (board.sizeX * board.sizeY) - mines) { //win
-            done = true;
-            outcome.textContent = "You win, smartass";
+            finishGame("You win, smartass");
         }
 
         if (result == 0) {
@@ -198,4 +196,9 @@ function flag(event) {
 function getDiv(num) {
     let cells = document.getElementsByClassName("cell");
     return cells[num];
+}
+function finishGame(text) {
+    done = true;
+    outcome.textContent = text;
+    outcome.style.backgroundColor = "white";
 }
