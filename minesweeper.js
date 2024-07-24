@@ -5,10 +5,10 @@ class Board {
         this.sizeY = sizeY;
     }
     setBoards() {
-        for (let x = 0; x < this.sizeX; x++) {
+        for (let y = 0; y < this.sizeY; y++) {
             this.mineBoard.push([]);
-            for (let y = 0; y < this.sizeY; y++) {
-                this.mineBoard[x].push("");
+            for (let x = 0; x < this.sizeX; x++) {
+                this.mineBoard[y].push("");
             }
         }
     }
@@ -20,60 +20,63 @@ class Board {
         let m = mines;
 
         while (m > 0) {
-            let x = Math.floor(Math.random() * this.mineBoard.length);
-            let y = Math.floor(Math.random() * this.mineBoard[0].length);
-            if (this.mineBoard[x][y] != "X" && !(x == firstX && y == firstY)) {
-                this.mineBoard[x][y] = "X";
+            let x = Math.floor(Math.random() * this.mineBoard[0].length);
+            let y = Math.floor(Math.random() * this.mineBoard.length);
+            if (this.mineBoard[y][x] != "X" && !(x == firstX && y == firstY)) {
+                this.mineBoard[y][x] = "X";
                 m--;
             }
         }
     }
     placeNums() {
-        for (let x = 0; x < this.mineBoard.length; x++) {
-            for (let y = 0; y < this.mineBoard[0].length; y++) {
-                if (this.mineBoard[x][y] != "X") {
+        for (let x = 0; x < this.mineBoard[0].length; x++) {
+            for (let y = 0; y < this.mineBoard.length; y++) {
+                if (this.mineBoard[y][x] != "X") {
                     let mines = 0;
 
                     for (let xMod = 1; xMod >= -1; xMod--) {
                         for (let yMod = 1; yMod >= -1; yMod--) {
-                            if (!(x + xMod >= this.mineBoard.length || x + xMod < 0 || y + yMod >= this.mineBoard[0].length || y + yMod < 0)) {
-                                if (this.mineBoard[x + xMod][y + yMod] == "X") {
+                            if (!(x + xMod >= this.mineBoard[0].length || x + xMod < 0 || y + yMod >= this.mineBoard.length || y + yMod < 0)) {
+                                if (this.mineBoard[y + yMod][x + xMod] == "X") {
                                     mines++;
                                 }
                             }
                         }
                     }
 
-                    this.mineBoard[x][y] = mines;
+                    this.mineBoard[y][x] = mines;
                 }
             }
         }
     }
     createCells() {
-        let num = 0;
+        
 
-        for (let x = 0; x < this.mineBoard.length; x++) {
-            for (let y = 0; y < this.mineBoard[0].length; y++) {
+        for (let y = 0; y < this.mineBoard.length; y++) {
+            let row = [];
+            for (let x = 0; x < this.mineBoard[0].length; x++) {
                 let cell = document.createElement("div");
                 cell.className = "cell";
-                cell.num = num;
                 cell.x = x;
                 cell.y = y;
                 cell.addEventListener("click", firstClick, false);
                 cell.addEventListener("click", click, false);
                 cell.addEventListener("contextmenu", flag, false);
+                row.push(cell);
                 grid.appendChild(cell);
-                num++;
             }
+            cells.push(row);
         }
     }
     getCell(x, y) {
-        return this.mineBoard[x][y];
+        return this.mineBoard[y][x];
     }
     reveal() {
         let cells = document.getElementsByClassName("cell");
         for (let cell of cells) {
-            cell.textContent = this.mineBoard[cell.x][cell.y];
+            if (this.mineBoard[cell.y][cell.x] != 0) { 
+                cell.textContent = this.mineBoard[cell.y][cell.x];
+            }
         }
     }
 }
@@ -88,6 +91,7 @@ let done = false;
 let numberClicked = 0;
 let outcome = document.createElement("div");
 outcome.style.display = "block";
+let cells = [];
 
 function start() {
     let sizeX = Number(document.getElementById("sizeX").value);
@@ -95,7 +99,7 @@ function start() {
     mines = Number(document.getElementById("mines").value);
     let reject = document.getElementById("reject");
 
-    if (sizeX == 0 || sizeY == 0) {
+    if (sizeX <= 0 || sizeY <= 0) {
         reject.textContent = "Error. There must be at least 1 row and 1 column.";
         return;
     }
@@ -125,7 +129,7 @@ function firstClick() {
     }
 }
 function click() {
-    if (!done && !this.clicked) {
+    if (!done && !this.clicked && !this.flagged) {
         let result = board.getCell(this.x, this.y);
         this.textContent = result;
         if (!this.clicked) {
@@ -146,44 +150,30 @@ function click() {
 
         if (result == 0) {
             this.textContent = "";
-            let cells = document.getElementsByClassName("cell");
-            let toClick = [];
 
-            if ((this.num + 1) % board.sizeY != 0) {    //right
-                //getDiv(this.num + 1).click();
-                toClick.push(this.num + 1);
+            if (!(this.x == 0) && !cells[this.y][this.x - 1].clicked) {   //left
+                cells[this.y][this.x - 1].click();
             }
-            if ((this.num) % board.sizeY != 0) {    //left
-                // getDiv(this.num - 1).click();
-                toClick.push(this.num - 1);
+            if (!(this.x == cells[0].length - 1) && !cells[this.y][this.x + 1].clicked) {   //right
+                cells[this.y][this.x + 1].click();
             }
-            if (this.num <= cells.length - board.sizeX) {   //down
-                // getDiv(this.num + board.sizeX).click(); 
-                toClick.push(this.num + board.sizeX);
+            if (!(this.y == 0) && !cells[this.y - 1][this.x].clicked) {   //up
+                cells[this.y - 1][this.x].click();
             }
-            if (this.num >= board.sizeX) {  //up
-                // getDiv(this.num - board.sizeX).click();
-                toClick.push(this.num - board.sizeX);
+            if (!(this.y == cells.length - 1) && !cells[this.y + 1][this.x].clicked) {   //down
+                cells[this.y + 1][this.x].click();
             }
-            if (this.num >= board.sizeX && (this.num + 1) % board.sizeY != 0) { //up right
-                // getDiv(this.num + 1 - board.sizeX).click();
-                toClick.push(this.num + 1 - board.sizeX);
+            if (!(this.y == 0) && !(this.x == 0) && !cells[this.y - 1][this.x - 1].clicked) {   //up left
+                cells[this.y - 1][this.x - 1].click();
             }
-            if (this.num >= board.sizeX && (this.num) % board.sizeY != 0) { //up left
-                // getDiv(this.num - 1 - board.sizeX).click();
-                toClick.push(this.num - 1 - board.sizeX);
+            if (!(this.y == 0) && !(this.x == cells[0].length - 1) && !cells[this.y - 1][this.x + 1].clicked) {   //up right
+                cells[this.y - 1][this.x + 1].click();
             }
-            if (this.num <= cells.length - board.sizeX && (this.num + 1) % board.sizeY != 0) {  //down right
-                // getDiv(this.num + 1 + board.sizeX).click();
-                toClick.push(this.num + 1 + board.sizeX);
+            if (!(this.y == cells.length - 1) && !(this.x == cells[0].length - 1) && !cells[this.y + 1][this.x + 1].clicked) {   //down right
+                cells[this.y + 1][this.x + 1].click();
             }
-            if (this.num <= cells.length - board.sizeX && (this.num) % board.sizeY != 0) {  //down left
-                // getDiv(this.num - 1 + board.sizeX).click();
-                toClick.push(this.num - 1 + board.sizeX);
-            }
-
-            for (let num of toClick) {
-                getDiv(num).click();
+            if (!(this.y == cells.length - 1) && !(this.x == 0) && !cells[this.y + 1][this.x - 1].clicked) {   //down left
+                cells[this.y + 1][this.x - 1].click();
             }
         }
     }
