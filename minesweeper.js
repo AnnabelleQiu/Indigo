@@ -179,7 +179,7 @@ function click() {
     }
 }
 function flag(event) {
-    if (!done) {
+    if (!done && !this.clicked) {
         event.preventDefault();
 
         if (!this.flagged) {
