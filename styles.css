@@ -3,6 +3,39 @@
         cursor: url('purpleCurser.png'), auto;
         background-color:rgba(148, 99, 181, 0.528);
       }
+
+
+      
+      #level-bubble {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 20px;
+        background-color:#cabbdf; /* 半透明灰色 */
+        color: white;
+        border-radius: 15px;
+        box-shadow: 0 0 10px white;
+        opacity: 0;
+        transition: opacity 0.5s, transform 0.5s;
+        pointer-events: none;
+        z-index: 1000;
+      }
+      
+      #level-bubble.show {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+      
+      .hidden {
+        display: none;
+      }
+
+      
+
+
+
+
           
       h1 {
         margin-top: 50px;
@@ -102,6 +135,7 @@
       #beginner:hover, #intermediate:hover, #expert:hover {
         background-color: #561cae;
         box-shadow: 0 0 20px #6f40a2;
+        transform: translateY(-5px);
     }
     #beginner:active, #intermediate:active, #expert:active {
   background-color: #a96ccf;
@@ -208,6 +242,7 @@
 #tip:hover {
   background-color: #561cae;
   box-shadow: 0 0 20px #6f40a2;
+  transform: translateY(5px);
 }
 #tip:active {
   background-color: #a96ccf;
@@ -272,7 +307,13 @@
 }
 
 
-#stop:hover, #continue:hover {
+#stop:hover {
+  background-color: #561cae;
+  box-shadow: 0 0 20px #6f40a2;
+  transform: translateY(-5px);
+}
+
+#continue:hover {
   background-color: #561cae;
   box-shadow: 0 0 20px #6f40a2;
 }

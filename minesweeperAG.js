@@ -618,3 +618,32 @@ document.getElementById("continue").addEventListener("click", () => {
 
 
 
+
+
+
+document.getElementById('beginner').addEventListener('click', function() {
+    showLevelBubble('Beginner Level');
+  });
+  
+  document.getElementById('intermediate').addEventListener('click', function() {
+    showLevelBubble('Intermediate Level');
+  });
+  
+  document.getElementById('expert').addEventListener('click', function() {
+    showLevelBubble('Expert Level');
+  });
+  
+  function showLevelBubble(text) {
+    const bubble = document.getElementById('level-bubble');
+    bubble.textContent = text;
+    bubble.classList.remove('hidden');
+    bubble.classList.add('show');
+    
+    setTimeout(() => {
+      bubble.classList.remove('show');
+      setTimeout(() => {
+        bubble.classList.add('hidden');
+      }, 500);
+    }, 1000); // 1秒后隐藏
+  }
+  
