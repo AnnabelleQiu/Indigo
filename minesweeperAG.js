@@ -38,7 +38,7 @@ function startTimer(){
 
 function resetTimer(){
     clearInterval(intervalID)
-    timepass = 0;
+    timePass = 0;
     isRunning = false;
 }
 
@@ -57,8 +57,9 @@ function stopTimer(){
 }
 function reveal(x, y) {
     // Start the timer
-    if(!isRunning) {
+    if(firstMove && !isRunning) {
         startTimer();
+        firstMove = false;
     }
     if (grid[x][y].isFlagged || grid[x][y].isRevealed || gameOver) {
         return;
@@ -114,6 +115,7 @@ function reveal(x, y) {
 
         return;
     }
+    
 
     if (!grid[x][y].isMine) {
         score += 10; // Increase score by 10 for each revealed cell
@@ -598,6 +600,28 @@ document.getElementById('continue').addEventListener('click', () => {
     resumeTimer();
 });
 
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    const ghost = document.createElement('div');
+    ghost.classList.add('ghost', 'face');
+    ghost.innerHTML = `
+      <div class="arms">
+        <div class="arm"></div>
+        <div class="arm"></div>
+      </div>
+      <div class="inner">
+        <div class="mouth"></div>
+      </div>
+    `;
+    document.body.appendChild(ghost);
+  
+    document.addEventListener('mousemove', (event) => {
+      ghost.style.left = `${event.clientX}px`;
+      ghost.style.top = `${event.clientY}px`;
+    });
+  });
+  
 
 
 

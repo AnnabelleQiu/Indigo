@@ -6,7 +6,7 @@
     <title>Minesweeper</title>
     <link rel="stylesheet" href="minesweeperAJ.css">
 </head>
-<body>
+<body class="fade-in">
     <div id="input">
         <h1>Minesweeper</h1>
         <div>
@@ -21,9 +21,27 @@
             <label id="mineLabel">Enter the number of mines</label>
             <input id="mines" type="number">
         </div>
-        <button id="submit">Submit</button>
+        <div class="button-container">
+            <button class="back-button" onclick="goBack()">Back to Mode Selection</button>
+            <button id="submit" onclick="startWithAnimation()">Submit</button>
+        </div>
         <span id="reject"></span>
     </div>
     <script src="minesweeperAJ.js"></script>
+    <script>
+        function goBack() {
+            document.body.classList.add('fade-out');
+            setTimeout(() => {
+                window.location.href = 'collection.html'; // 这里假设你的主页文件名是 collection.html
+            }, 500);
+        }
+
+        function startWithAnimation() {
+            document.body.classList.add('fade-out');
+            setTimeout(() => {
+                start();
+            }, 500);
+        }
+    </script>
 </body>
 </html>

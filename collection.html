@@ -6,8 +6,8 @@
     <title>Indigo Minesweeper</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            font-family: 'Times New Roman', serif;
+            background: linear-gradient(135deg, #8662b4, #f7f7f7);
             margin: 0;
             padding: 0;
             display: flex;
@@ -15,33 +15,94 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            overflow: hidden;
         }
+
         h1 {
             color: indigo;
-            margin-bottom: 20px;
+            margin-bottom: 40px;
+            font-size: 3rem;
+            animation: fadeIn 2s ease-in-out;
+            text-shadow: 2px 2px 5px #eeeeee;
         }
+
         .container {
             display: flex;
             gap: 20px;
+            transform: scale(1);
+            transition: transform 0.3s ease-in-out;
         }
+        
+        .container:hover {
+            transform: scale(1.05);
+        }
+
         .box {
             background-color: indigo;
             color: white;
             padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+            text-align: center;
         }
+        
+        .box:hover {
+            background-color: #4b0082;
+            transform: translateY(-10px);
+        }
+
         .box h2 {
             margin-top: 0;
+            font-size: 1.5rem;
+            animation: slideIn 1s ease-out;
+            font-family: 'Times New Roman', serif;
+            text-shadow: 2px 2px 5px #000;
+            transition: color 0.3s, text-shadow 0.3s;
         }
+
         .box a {
-            color: lightblue;
+            color: rgb(243, 222, 238);
             text-decoration: none;
             display: block;
-            margin: 5px 0;
+            margin: 10px 0;
+            font-size: 1.2rem;
+            animation: slideIn 1.2s ease-out;
+            text-shadow: 2px 2px 5px #000;
         }
-        .box a:hover {
-            text-decoration: underline;
+
+        .box a:hover .mode {
+            color: #c3b0e2;
+            text-shadow: 0 0 10px #ffffff, 0 0 20px rgb(255, 255, 255), 0 0 30px rgb(255, 255, 255), 0 0 40px purple;
+        }
+        
+        .box a:active .mode {
+            color: #eee3f4;
+            text-shadow: 0 0 10px #663066, 0 0 20px #60394c, 0 0 30px #593152, 0 0 40px #ff4500;
+        }
+
+        .glare {
+            color: #8662b4;
+            text-shadow: 0 0 10px #ffffff, 0 0 20px rgb(255, 255, 255), 0 0 30px rgb(255, 255, 255), 0 0 40px purple;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            0% { transform: translateX(-30px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s ease-in-out forwards;
         }
     </style>
 </head>
@@ -49,13 +110,30 @@
     <h1>INDIGO MINESWEEPER</h1>
     <div class="container">
         <div class="box">
-            <h2>Annabelle, Ginger</h2>
-            <a href="C:\Users\qiunu\Indigo\minesweeperAG.html" target="_blank">A&G's Website</a>
+            <a href="C:\Users\qiunu\Indigo\minesweeperAJ.html" class="mode-link">
+                <h2 class="mode">Custom Mode</h2>
+            </a>
+            <span>Andrew, Jeffery</span>
         </div>
         <div class="box">
-            <h2>Andrew, Jeffery</h2>
-            <a href="https://example.com/andrew" target="_blank">A&J's Website</a>
+            <a href="C:\Users\qiunu\Indigo\minesweeperAG.html" class="mode-link">
+                <h2 class="mode">Cuter Mode</h2>
+            </a>
+            <span>Annabelle, Ginger</span>
         </div>
     </div>
+
+    <script>
+        document.querySelectorAll('.mode-link').forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault();
+                const modeText = this.querySelector('.mode');
+                document.body.classList.add('fade-out');
+                setTimeout(() => {
+                    window.location.href = this.href;
+                }, 500); // 延迟500毫秒后跳转
+            });
+        });
+    </script>
 </body>
 </html>

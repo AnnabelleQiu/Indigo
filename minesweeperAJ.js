@@ -4,6 +4,7 @@ class Board {
         this.sizeX = sizeX;
         this.sizeY = sizeY;
     }
+
     setBoards() {
         for (let y = 0; y < this.sizeY; y++) {
             this.mineBoard.push([]);
@@ -12,10 +13,12 @@ class Board {
             }
         }
     }
+
     setMineBoard(firstX, firstY, mines) {
         this.placeMines(firstX, firstY, mines);
         this.placeNums();
     }
+
     placeMines(firstX, firstY, mines) {
         let m = mines;
 
@@ -28,6 +31,7 @@ class Board {
             }
         }
     }
+
     placeNums() {
         for (let x = 0; x < this.mineBoard[0].length; x++) {
             for (let y = 0; y < this.mineBoard.length; y++) {
@@ -49,9 +53,8 @@ class Board {
             }
         }
     }
-    createCells() {
-        
 
+    createCells() {
         for (let y = 0; y < this.mineBoard.length; y++) {
             let row = [];
             for (let x = 0; x < this.mineBoard[0].length; x++) {
@@ -69,13 +72,15 @@ class Board {
             cells.push(row);
         }
     }
+
     getCell(x, y) {
         return this.mineBoard[y][x];
     }
+
     reveal() {
         let cells = document.getElementsByClassName("cell");
         for (let cell of cells) {
-            if (this.mineBoard[cell.y][cell.x] == "X") { 
+            if (this.mineBoard[cell.y][cell.x] == "X") {
                 cell.textContent = this.mineBoard[cell.y][cell.x];
             }
         }
@@ -84,7 +89,7 @@ class Board {
 
 let submit = document.getElementById("submit");
 let mines = 0;
-submit.addEventListener("click", start, false);
+submit.addEventListener("click", startWithAnimation, false);
 let board;
 let grid;
 let firstClicked = false;
@@ -100,12 +105,15 @@ let stopwatch;
 let watchpng = document.createElement("img");
 let timer = document.createElement("div");
 let container = document.createElement("div");
-watchpng.src = "images/stopwatch.png";
+watchpng.src = "stopwatch.png";
 let firstGame = true;
 let sizeX;
 let sizeY;
 
 function start() {
+    document.body.classList.remove('fade-out');
+    document.body.classList.add('fade-in');
+
     if (firstGame) {
         sizeX = Math.floor(Number(document.getElementById("sizeX").value));
         sizeY = Math.floor(Number(document.getElementById("sizeY").value));
@@ -124,7 +132,7 @@ function start() {
 
     container = document.createElement("div");
     document.body.appendChild(container);
-    board = new Board(sizeX, sizeY)
+    board = new Board(sizeX, sizeY);
     board.setBoards();
     if (firstGame) {
         document.body.removeChild(document.getElementById("input"));
@@ -132,27 +140,40 @@ function start() {
     grid = document.createElement("div");
     grid.id = "grid";
     container.appendChild(grid);
-    grid.style.setProperty("grid-template-columns", "repeat(" + board.sizeX + ", 30px)")
+    grid.style.setProperty("grid-template-columns", "repeat(" + board.sizeX + ", 30px)");
     board.createCells();
 
     container.appendChild(timerContainer);
     timerContainer.appendChild(watchpng);
     timerContainer.appendChild(timer);
     timer.textContent = counter;
-    
+
     stopwatch = setInterval(time, 1000);
 
     container.appendChild(outcome);
+
+    const backButton = document.createElement("button");
+    backButton.className = "back-button";
+    backButton.textContent = "Back to Mode Selection";
+    backButton.onclick = () => {
+        document.body.classList.add('fade-out');
+        setTimeout(() => {
+            window.location.href = 'collection.html';
+        }, 500);
+    };
+    container.appendChild(backButton);
 }
+
 function firstClick() {
     if (!firstClicked) {
-        x = this.x;
-        y = this.y;
+        let x = this.x;
+        let y = this.y;
         board.setMineBoard(x, y, mines);
         this.removeEventListener("click", firstClick, false);
         firstClicked = true;
     }
 }
+
 function click() {
     if (!done && !this.clicked && !this.flagged) {
         let result = board.getCell(this.x, this.y);
@@ -161,45 +182,46 @@ function click() {
             numberClicked++;
         }
         this.clicked = true;
-        this.style.backgroundColor = "white"
+        this.style.backgroundColor = "white";
 
-        if (result == "X") { //lose
+        if (result == "X") { // lose
             finishGame("You lose :(");
             board.reveal();
-        } else if (numberClicked == (board.sizeX * board.sizeY) - mines) { //win
+        } else if (numberClicked == (board.sizeX * board.sizeY) - mines) { // win
             finishGame("You win! :)");
         }
 
         if (result == 0) {
             this.textContent = "";
 
-            if (!(this.x == 0) && !cells[this.y][this.x - 1].clicked) {   //left
+            if (!(this.x == 0) && !cells[this.y][this.x - 1].clicked) { // left
                 cells[this.y][this.x - 1].click();
             }
-            if (!(this.x == cells[0].length - 1) && !cells[this.y][this.x + 1].clicked) {   //right
+            if (!(this.x == cells[0].length - 1) && !cells[this.y][this.x + 1].clicked) { // right
                 cells[this.y][this.x + 1].click();
             }
-            if (!(this.y == 0) && !cells[this.y - 1][this.x].clicked) {   //up
+            if (!(this.y == 0) && !cells[this.y - 1][this.x].clicked) { // up
                 cells[this.y - 1][this.x].click();
             }
-            if (!(this.y == cells.length - 1) && !cells[this.y + 1][this.x].clicked) {   //down
+            if (!(this.y == cells.length - 1) && !cells[this.y + 1][this.x].clicked) { // down
                 cells[this.y + 1][this.x].click();
             }
-            if (!(this.y == 0) && !(this.x == 0) && !cells[this.y - 1][this.x - 1].clicked) {   //up left
+            if (!(this.y == 0) && !(this.x == 0) && !cells[this.y - 1][this.x - 1].clicked) { // up left
                 cells[this.y - 1][this.x - 1].click();
             }
-            if (!(this.y == 0) && !(this.x == cells[0].length - 1) && !cells[this.y - 1][this.x + 1].clicked) {   //up right
+            if (!(this.y == 0) && !(this.x == cells[0].length - 1) && !cells[this.y - 1][this.x + 1].clicked) { // up right
                 cells[this.y - 1][this.x + 1].click();
             }
-            if (!(this.y == cells.length - 1) && !(this.x == cells[0].length - 1) && !cells[this.y + 1][this.x + 1].clicked) {   //down right
+            if (!(this.y == cells.length - 1) && !(this.x == cells[0].length - 1) && !cells[this.y + 1][this.x + 1].clicked) { // down right
                 cells[this.y + 1][this.x + 1].click();
             }
-            if (!(this.y == cells.length - 1) && !(this.x == 0) && !cells[this.y + 1][this.x - 1].clicked) {   //down left
+            if (!(this.y == cells.length - 1) && !(this.x == 0) && !cells[this.y + 1][this.x - 1].clicked) { // down left
                 cells[this.y + 1][this.x - 1].click();
             }
         }
     }
 }
+
 function flag(event) {
     if (!done && !this.clicked) {
         event.preventDefault();
@@ -208,7 +230,7 @@ function flag(event) {
             this.flagged = true;
             let flag = document.createElement("img");
             flag.className = "flag";
-            flag.src = "images/flag.png";
+            flag.src = "flag.png";
             this.textContent = "";
             this.appendChild(flag);
         } else {
@@ -217,13 +239,15 @@ function flag(event) {
         }
     }
 }
+
 function getDiv(num) {
     let cells = document.getElementsByClassName("cell");
     return cells[num];
 }
+
 function finishGame(text) {
     done = true;
-    outcome.id = "outcome"
+    outcome.id = "outcome";
     outcome.textContent = text;
     clearInterval(stopwatch);
 
@@ -233,10 +257,12 @@ function finishGame(text) {
     reset.addEventListener("click", restart, false);
     container.appendChild(reset);
 }
+
 function time() {
     counter++;
     timer.textContent = counter;
 }
+
 function restart() {
     document.body.removeChild(container);
     firstGame = false;
@@ -249,4 +275,19 @@ function restart() {
     cells = [];
 
     start();
+}
+
+function startWithAnimation() {
+    document.body.classList.add('fade-out');
+    setTimeout(() => {
+        document.body.classList.remove('fade-out');
+        start();
+    }, 2000);
+
+}
+function goBack() {
+    document.body.classList.add('fade-out');
+    setTimeout(() => {
+        window.location.href = 'collection.html';
+    }, 2000); // 确保与 CSS 动画时间一致
 }
