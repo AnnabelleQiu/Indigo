@@ -75,7 +75,7 @@ class Board {
     reveal() {
         let cells = document.getElementsByClassName("cell");
         for (let cell of cells) {
-            if (this.mineBoard[cell.y][cell.x] != 0) { 
+            if (this.mineBoard[cell.y][cell.x] == "X") { 
                 cell.textContent = this.mineBoard[cell.y][cell.x];
             }
         }
@@ -228,6 +228,7 @@ function finishGame(text) {
     clearInterval(stopwatch);
 
     let reset = document.createElement("button");
+    reset.id = "reset";
     reset.textContent = "Reset";
     reset.addEventListener("click", restart, false);
     container.appendChild(reset);
