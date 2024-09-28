@@ -288,6 +288,6 @@ function startWithAnimation() {
 function goBack() {
     document.body.classList.add('fade-out');
     setTimeout(() => {
-        window.location.href = 'collection.html';
+        window.location.href = 'index.html';
     }, 2000); // 确保与 CSS 动画时间一致
 }
