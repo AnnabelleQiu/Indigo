@@ -616,11 +616,6 @@ document.getElementById("continue").addEventListener("click", () => {
   resumeTimer();
 });
 
-
-
-
-
-
 document.getElementById('beginner').addEventListener('click', function() {
     showLevelBubble('Beginner Level');
   });
